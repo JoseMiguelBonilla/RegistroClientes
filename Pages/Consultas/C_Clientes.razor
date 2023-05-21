@@ -1,0 +1,73 @@
+@page "/Consultas"
+@inject ClientesBLL ClientesBLL
+
+
+<EditForm Model="lista">
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h4>Consulta de Clientes</h4>
+            </div>
+
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <InputText @bind-Value="Nombres" class="form-control" aria-describedby="buscarButton" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button" id="buscarButton">
+                        <i class="oi oi-magnifying-glass" />
+                    </button>
+                </div>
+
+                <table class="table table-responsive table-condensed table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ClienteId</th>
+                            <th>Nombres</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Clientes in lista)
+                        {
+                            <tr>
+                                <td>@Clientes.ClienteId</td>
+                                <td>@Clientes.Nombres</td>
+                                <td><a class="btn btn-outline-primary" href="ocupacion/@Clientes.ClienteId">Ver</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                <div class="form-row justify-content-sm-between" aria-orientation="vertical">
+                    <div class="col-3">
+                        <label for="CantidaRegistro" class="col-form-label"><strong>Filas</strong>&nbsp;</label>
+                        <input id="CantidaRegistro" @bind-value="@conteo" disabled class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code
+{
+    public string Nombres { get; set; } = "";
+    public int conteo { get; set; } = 0;
+
+    
+
+    public List<Cliente> lista { get; set; } = new List<Cliente>();
+
+    public void Buscar()
+    {
+        if (string.IsNullOrWhiteSpace(Nombres))
+            lista = ClientesBLL.GetList(s => true);
+        else
+            lista = ClientesBLL.GetList(s => s.Nombres.Contains(Nombres));
+
+        conteo = lista.Count();
+    }
+
+}

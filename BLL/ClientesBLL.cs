@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using RegistroClientes.Models;
 using RegistroClientes.DAL;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace RegistroClientes.BLL
 {
@@ -62,6 +63,14 @@ namespace RegistroClientes.BLL
             return _contexto.Clientes
                 .AsNoTracking()
                 .FirstOrDefault(s => s.ClienteId == ClienteId);
+        }
+
+         public List<Cliente> GetList(Expression<Func<Cliente, bool>> Criterio)
+        {
+            return _contexto.Clientes
+                .Where(Criterio)
+                .AsNoTracking()
+                .ToList();
         }
  }
 }
