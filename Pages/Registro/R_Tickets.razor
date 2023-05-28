@@ -1,76 +1,79 @@
-@page "/Registro"
-@inject ClientesBLL ClientesBLL
+@page "/RegistroTickets"
+@page "/RegistroTickets/{TicketId:int}"
+@inject TicketsBLL TicketsBLL
 @using RegistroClientes.Models
 @inject NotificationService notificationService
 
 
-<EditForm Model="Clientes" OnValidSubmit="Guardar">
+<EditForm Model="Ticket" OnValidSubmit="Guardar">
      <DataAnnotationsValidator />
 
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header">
-                <h3>Registro de Clientes </h3>
+                <h3>Registro de tickets </h3>
             </div>
             <div class="card-body">
                 @*BuscarId*@
                 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4">
                     <div class="input-group mb-3">
-                        <InputNumber @bind-Value="Clientes.ClienteId" class="form-control" aria-describedby="buscarButton" />
+                        <InputNumber @bind-Value="Ticket.TicketId" class="form-control" aria-describedby="buscarButton" />
                         <button @onclick="Buscar" class="btn btn-outline-primary" type="button" id="buscarButton">
                             <i class="oi oi-magnifying-glass" />
                         </button>
                     </div>
                 </div>
 
-                @*ClienteId*@
+                @*TicketId*@
+                <div class="mb-3">
+                    <label class="form-label">TicketId</label>
+                    <InputNumber @bind-Value="Ticket.TicketId" class="form-control" />
+                    <ValidationMessage For="@(() => Ticket.TicketId)" />
+                </div>
+
+                @*Fecha*@
+                <div class="mb-3">
+                    <label class="form-label">Fecha</label>
+                    <InputNumber @bind-Value="Ticket.Fecha" class="form-control" />
+                    <ValidationMessage For="@(() => Ticket.Fecha)" />
+                </div>
+                 @*ClienteId*@
                 <div class="mb-3">
                     <label class="form-label">ClienteId</label>
-                    <InputNumber @bind-Value="Clientes.ClienteId" class="form-control" />
-                    <ValidationMessage For="@(() => Clientes.ClienteId)" />
+                    <InputNumber @bind-Value="Ticket.ClienteId" class="form-control" />
+                    <ValidationMessage For="@(() => Ticket.ClienteId)" />
                 </div>
-
-                @*Nombre*@
+                  @*SistemaId*@
                 <div class="mb-3">
-                    <label class="form-label">Nombres</label>
-                    <InputText @bind-Value="Clientes.Nombres" class="form-control" />
-                    <ValidationMessage For="@(() => Clientes.Nombres)" />
+                    <label class="form-label">SistemaId</label>
+                    <InputNumber @bind-Value="Ticket.SistemaId" class="form-control" />
+                    <ValidationMessage For="@(() => Ticket.SistemaId)" />
                 </div>
-
-                @*Telefono*@
+                    @*PrioridadId*@
                 <div class="mb-3">
-                    <label class="form-label">Telefono</label>
-                    <InputNumber @bind-Value="Clientes.Telefono" class="form-control" />
-                    <ValidationMessage For="@(() => Clientes.Telefono)" />
+                    <label class="form-label">PrioridadId</label>
+                    <InputNumber @bind-Value="Ticket.PrioridadId" class="form-control" />
+                    <ValidationMessage For="@(() => Ticket.PrioridadId)" />
                 </div>
-
-                @*Celular*@
+                 @*SolicitadoPor*@
                 <div class="mb-3">
-                    <label class="form-label">Celular</label>
-                    <InputNumber @bind-Value="Clientes.Celular" class="form-control" />
-                    <ValidationMessage For="@(() => Clientes.Celular)" />
+                    <label class="form-label">SolicitadoPor</label>
+                    <InputText @bind-Value="Ticket.SolicitadoPor" class="form-control" />
+                    <ValidationMessage For="@(() => Ticket.SolicitadoPor)" />
                 </div>
-                
-                @*RNC*@
+                   @*Asunto*@
                 <div class="mb-3">
-                    <label class="form-label">RNC</label>
-                    <InputNumber @bind-Value="Clientes.RNC" class="form-control" />
-                    <ValidationMessage For="@(() => Clientes.RNC)" />
+                    <label class="form-label">Asunto</label>
+                    <InputText @bind-Value="Ticket.Asunto" class="form-control" />
+                    <ValidationMessage For="@(() => Ticket.Asunto)" />
                 </div>
-
-                @*Email*@
+                 @*Descripcion*@
                 <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <InputText @bind-Value="Clientes.Email" class="form-control" />
-                    <ValidationMessage For="@(() => Clientes.Email)" />
+                    <label class="form-label">Descripcion</label>
+                    <InputText @bind-Value="Ticket.Descripcion" class="form-control" />
+                    <ValidationMessage For="@(() => Ticket.Descripcion)" />
                 </div>
-                
-                @*Direccion*@
-                <div class="mb-3">
-                    <label class="form-label">Direccion</label>
-                    <InputText @bind-Value="Clientes.Direccion" class="form-control" />
-                    <ValidationMessage For="@(() => Clientes.Direccion)" />
-                </div>
+               
 
             </div>
 
@@ -90,39 +93,28 @@
 
 @code 
 {
-    public int ClienteId { get; set; }
-    public Cliente Clientes = new Cliente();
+    public int TicketId { get; set; }
+    public Tickets Ticket = new Tickets();
 
     protected override void OnInitialized()
     {
-        if (ClienteId > 0)
+        if (TicketId > 0)
         {
-            this.Clientes.ClienteId = this.ClienteId;
+            this.Ticket.TicketId = this.TicketId;
             Buscar();
         }
     }
 
-    public void Buscar()
-    {
-        var ClienteEncontrada = ClientesBLL.Buscar(Clientes.ClienteId);
-        if (ClienteEncontrada != null)
-        {
-            this.Clientes = ClienteEncontrada;
-        }
-        else
-        {
-            notificationService.ShowNotification(
-            titulo: "Error de Busqueda",
-            mensaje: "Registro no encontrado",
-            NotificationSeverity.Error);
-
-        }
-    }
+   
     public void Nuevo()
     {
-        this.Clientes = new Cliente();
+        this.Ticket = new Tickets();
     }
 
+    public void Buscar()
+    {
+        
+    }
     public void Guardar()
     {
         if (!Validar())
@@ -134,7 +126,7 @@
             return;
         }
 
-        var guardo = ClientesBLL.Guardar(this.Clientes);
+        var guardo = TicketsBLL.Guardar(this.Ticket);
         if (guardo)
         {
             notificationService.ShowNotification(
@@ -156,7 +148,7 @@
     public void Eliminar()
     {
         Buscar();
-        if (ClientesBLL.Eliminar(this.Clientes))
+        if (TicketsBLL.Eliminar(this.Ticket))
         {
             notificationService.ShowNotification(
                 titulo: "Exito",

@@ -7,7 +7,7 @@ namespace RegistroClientes.Models
         [Key] 
         public int ClienteId {get; set;}
         [Required(ErrorMessage ="Los nombres son obligatorios")]
-        public string Nombres {get; set;}
+        public string? Nombres {get; set;}
         [Required(ErrorMessage ="Los medio de contacto son obligatorios")]
         public long Telefono {get; set;}
         [Required(ErrorMessage ="Los medio de contacto son obligatorios")]
@@ -19,6 +19,6 @@ namespace RegistroClientes.Models
 
         [Required(ErrorMessage ="La direccion es obligatoria")]
         public string Direccion {get; set;}
-        
+        public int PrioridadId { get; internal set; }
     }
 }
