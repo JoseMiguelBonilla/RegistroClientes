@@ -9,7 +9,6 @@ namespace RegistroClientes.DAL
     {
         public DbSet<Cliente> Clientes {get; set;}
         public DbSet<Tickets> Ticket {get; set;}
-        public DbSet<Prioridades> Prioridad {get; set;}
         public Contexto(DbContextOptions<Contexto>options): base(options){}
 
     }

@@ -16,7 +16,7 @@ builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlite(ConStr));
 builder.Services.AddScoped<NotificationService>();
 
 builder.Services.AddScoped<ClientesBLL>();
-builder.Services.AddScoped<PrioridadesBLL>();
+
 builder.Services.AddScoped<TicketsBLL>();
 var app = builder.Build();
 
